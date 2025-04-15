@@ -1,0 +1,268 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityTutorial.Manager;
+
+namespace UnityTutorial.PlayerControl
+{
+    public class PlayerController : MonoBehaviour
+    {
+        // Sound FX
+        [SerializeField] private AudioClip[] walkClipsArray;
+        [SerializeField] private float footstepInterval = 0.4f; // Base interval
+
+        [SerializeField] private float AnimBlendSpeed = 8.9f;
+        [SerializeField] private Transform CameraRoot;
+        [SerializeField] private Transform Camera;
+        [SerializeField] private float UpperLimit = -40f;
+        [SerializeField] private float BottomLimit = 70f;
+        [SerializeField] private float MouseSensitivity = 21.9f;
+        [SerializeField, Range(10, 500)] private float JumpFactor = 260f;
+        [SerializeField] private float Dis2Ground = 0.8f;
+        [SerializeField] private LayerMask GroundCheck;
+        [SerializeField] private float AirResistance = 0.8f;
+        
+        // New adjustable movement speed multiplier.
+        [SerializeField] private float movementSpeedMultiplier = 1.0f;
+
+        private Rigidbody _playerRigidbody;
+        private InputManager _inputManager;
+        private Animator _animator;
+        private bool _grounded = false;
+        private bool _hasAnimator;
+
+        private int _xVelHash;
+        private int _yVelHash;
+        private int _zVelHash;
+        private int _jumpHash;
+        private int _groundHash;
+        private int _fallingHash;
+        private int _crouchHash;
+        private int _Slid;
+
+        private float _xRotation;
+
+        private const float _walkSpeed = 2f;
+        private const float _runSpeed = 6f;
+        
+        // Footstep Audio
+        private AudioClip[] footstepClips;
+        private int currentStepIndex = 0;
+        private float footstepTimer = 0f;
+        private bool useOrderedSequence = true;
+        private List<int> randomSequence;
+
+        private void Start()
+        {
+            _hasAnimator = TryGetComponent(out _animator);
+            _playerRigidbody = GetComponent<Rigidbody>();
+            _inputManager = GetComponent<InputManager>();
+
+            _xVelHash = Animator.StringToHash("X_Velocity");
+            _yVelHash = Animator.StringToHash("Y_Velocity");
+            _zVelHash = Animator.StringToHash("Z_Velocity");
+            _jumpHash = Animator.StringToHash("Jump");
+            _groundHash = Animator.StringToHash("Grounded");
+            _fallingHash = Animator.StringToHash("Falling");
+            _crouchHash = Animator.StringToHash("Crouch");
+            _Slid = Animator.StringToHash("Slid");
+
+            footstepClips = walkClipsArray;
+        }
+
+        private void FixedUpdate()
+        {
+            SampleGround();
+            Move();
+            HandleJump();
+            HandleCrouch();
+            HandleSlid();
+        }
+
+        private void LateUpdate()
+        {
+            CamMovements();
+        }
+
+        private void Move()
+        {
+            if (!_hasAnimator) return;
+
+            // Get and normalize move input.
+            Vector2 moveInput = _inputManager.Move;
+            if (moveInput.sqrMagnitude > 1f)
+                moveInput.Normalize();
+
+            // Determine target speed and apply adjustable multiplier.
+            float speed = _inputManager.Run ? _runSpeed : _walkSpeed;
+            speed *= movementSpeedMultiplier;
+
+            if (_inputManager.Crouch)
+                speed = 1.5f * movementSpeedMultiplier;
+            
+            bool isMoving = moveInput != Vector2.zero;
+
+            // Calculate a movement direction using player's right and forward vectors.
+            Vector3 moveDirection = (transform.right * moveInput.x + transform.forward * moveInput.y).normalized;
+            Vector3 desiredVelocity = moveDirection * speed;
+
+            // Get current horizontal velocity.
+            Vector3 currentVelocity = _playerRigidbody.velocity;
+            Vector3 horizontalVelocity = new Vector3(currentVelocity.x, 0f, currentVelocity.z);
+
+            // Smoothly blend towards the desired velocity.
+            Vector3 newVelocity = Vector3.Lerp(horizontalVelocity, desiredVelocity, AnimBlendSpeed * Time.fixedDeltaTime);
+            Vector3 velocityChange = newVelocity - horizontalVelocity;
+
+            if (_grounded)
+            {
+                _playerRigidbody.AddForce(velocityChange, ForceMode.VelocityChange);
+                HandleFootsteps(isMoving);
+            }
+            else
+            {
+                _playerRigidbody.AddForce(velocityChange * AirResistance, ForceMode.VelocityChange);
+                footstepTimer = 0f;
+            }
+
+            _animator.SetFloat(_xVelHash, newVelocity.x);
+            _animator.SetFloat(_yVelHash, newVelocity.z);
+        }
+
+        private void HandleFootsteps(bool isMoving)
+        {
+            if (!isMoving)
+            {
+                footstepTimer = 0f;
+                useOrderedSequence = true;
+                currentStepIndex = 0;
+                return;
+            }
+
+            // Shorter interval when running.
+            float effectiveInterval = _inputManager.Run ? footstepInterval / 1.5f : footstepInterval;
+            footstepTimer += Time.fixedDeltaTime;
+
+            if (footstepTimer >= effectiveInterval)
+            {
+                footstepTimer = 0f;
+                PlayNextFootstep();
+            }
+        }
+
+        private void PlayNextFootstep()
+        {
+            if (footstepClips.Length == 0)
+                return;
+
+            AudioClip clipToPlay = null;
+
+            if (useOrderedSequence)
+            {
+                clipToPlay = footstepClips[currentStepIndex];
+                currentStepIndex++;
+
+                if (currentStepIndex >= footstepClips.Length)
+                {
+                    useOrderedSequence = false;
+                    currentStepIndex = 0;
+                    randomSequence = GenerateRandomSequence();
+                }
+            }
+            else
+            {
+                int randomIndex = randomSequence[currentStepIndex];
+                clipToPlay = footstepClips[randomIndex];
+                currentStepIndex++;
+
+                if (currentStepIndex >= footstepClips.Length)
+                {
+                    currentStepIndex = 0;
+                    randomSequence = GenerateRandomSequence();
+                }
+            }
+
+            SoundFXManager.instance.playSoundFXClip(clipToPlay, transform, 1f);
+        }
+
+        private List<int> GenerateRandomSequence()
+        {
+            List<int> sequence = new List<int>();
+            for (int i = 0; i < footstepClips.Length; i++)
+            {
+                sequence.Add(i);
+            }
+
+            for (int i = 0; i < sequence.Count; i++)
+            {
+                int rnd = UnityEngine.Random.Range(i, sequence.Count);
+                int temp = sequence[rnd];
+                sequence[rnd] = sequence[i];
+                sequence[i] = temp;
+            }
+
+            return sequence;
+        }
+
+        private void CamMovements()
+        {
+            if (!_hasAnimator) return;
+
+            float Mouse_X = _inputManager.Look.x;
+            float Mouse_Y = _inputManager.Look.y;
+            Camera.position = CameraRoot.position;
+
+            _xRotation -= Mouse_Y * MouseSensitivity * Time.smoothDeltaTime;
+            _xRotation = Mathf.Clamp(_xRotation, UpperLimit, BottomLimit);
+
+            Camera.localRotation = Quaternion.Euler(_xRotation, 0, 0);
+            _playerRigidbody.MoveRotation(_playerRigidbody.rotation * Quaternion.Euler(0, Mouse_X * MouseSensitivity * Time.smoothDeltaTime, 0));
+        }
+
+        private void HandleCrouch() => _animator.SetBool(_crouchHash, _inputManager.Crouch);
+
+        private void HandleSlid()
+        {
+            if (!_grounded) return;
+            _animator.SetBool(_Slid, _inputManager.Slid);
+        }
+
+        private void HandleJump()
+        {
+            if (!_hasAnimator || !_inputManager.Jump || !_grounded)
+                return;
+            _animator.SetTrigger(_jumpHash);
+        }
+
+        public void JumpAddForce()
+        {
+            _playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
+            _playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
+            _animator.ResetTrigger(_jumpHash);
+        }
+
+        private void SampleGround()
+        {
+            if (!_hasAnimator) return;
+
+            RaycastHit hitInfo;
+            if (Physics.Raycast(_playerRigidbody.worldCenterOfMass, Vector3.down, out hitInfo, Dis2Ground + 0.1f, GroundCheck))
+            {
+                _grounded = true;
+                SetAnimationGrounding();
+                return;
+            }
+
+            _grounded = false;
+            _animator.SetFloat(_zVelHash, _playerRigidbody.velocity.y);
+            SetAnimationGrounding();
+        }
+
+        private void SetAnimationGrounding()
+        {
+            _animator.SetBool(_fallingHash, !_grounded);
+            _animator.SetBool(_groundHash, _grounded);
+        }
+    }
+}

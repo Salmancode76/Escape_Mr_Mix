@@ -7550,7 +7550,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53e2f448048f56747ae1f280e3e58c41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerInput: {fileID: 7166849328497392856}
+  playerInput: {fileID: 7166849328497392856}
 --- !u!114 &7166849328497392854
 MonoBehaviour:
   m_ObjectHideFlags: 0

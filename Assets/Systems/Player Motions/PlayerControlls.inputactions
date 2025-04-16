@@ -151,8 +151,8 @@
                 },
                 {
                     "name": "",
-                    "id": "54ec0aa2-e2d3-451c-b2bc-64e9eec4fa6c",
-                    "path": "<Keyboard>/leftCtrl",
+                    "id": "69539107-e873-44e3-80c9-f7137fe802c7",
+                    "path": "<Keyboard>/c",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -162,8 +162,8 @@
                 },
                 {
                     "name": "",
-                    "id": "83346ccd-e8c2-4604-b95c-f8489cfa0e9d",
-                    "path": "<Keyboard>/c",
+                    "id": "45e37f92-89b2-47df-a3a2-75dd1be52ff5",
+                    "path": "<Keyboard>/leftCtrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

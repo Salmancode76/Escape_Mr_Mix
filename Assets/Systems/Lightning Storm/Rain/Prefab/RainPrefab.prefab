@@ -4783,7 +4783,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: bd4df8ad7f6a91b4aad18ac427db8176, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9536,7 +9535,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 26903820d8bdf4145af868b7b12d0e18, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -9613,7 +9611,7 @@ Transform:
   m_GameObject: {fileID: 160098}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 4.371044, y: 1, z: 3.0945}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 413392}
@@ -9641,7 +9639,7 @@ MonoBehaviour:
   RainSoundMedium: {fileID: 8300000, guid: 3359e9d10af08ca46ae396298dbd1ed9, type: 3}
   RainSoundHeavy: {fileID: 8300000, guid: db1471092e49b7445bfbd374a17ea61a, type: 3}
   RainSoundAudioMixer: {fileID: 0}
-  RainIntensity: 1
+  RainIntensity: 0.25
   RainFallParticleSystem: {fileID: 19831730}
   RainExplosionParticleSystem: {fileID: 19824492}
   RainMistParticleSystem: {fileID: 19836512}
@@ -14368,7 +14366,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5a5cdbef1fec3ec4ab759228c8234ed5, type: 2}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -4,5 +4,23 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: 3b82371429c6ba84ea5c2dce69242025
+  - enabled: 1
+    path: Assets/Scenes/1- Mahdi(Starter Level).unity
+    guid: 72f63569e35cf7d43bb93dd7b7288e3d
+  - enabled: 1
+    path: Assets/Scenes/2- Yahya.unity
+    guid: dbfecd3aa9ce11d45a9fa18f31e68957
+  - enabled: 1
+    path: Assets/Scenes/3- Salman.unity
+    guid: e7e9f098a05e338468ef77d808197716
+  - enabled: 1
+    path: Assets/Scenes/4- Rehan.unity
+    guid: 4c3e3ea2421303849a0c3a6c2ad11b75
+  - enabled: 1
+    path: Assets/Scenes/5- Ahmed.unity
+    guid: b3879e84785181d43a4a48be45746b51
   m_configObjects: {}

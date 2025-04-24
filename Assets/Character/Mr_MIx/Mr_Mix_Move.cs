@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.SceneManagement;
 
 public class Mr_Mix_Move : MonoBehaviour
 {
@@ -12,20 +11,39 @@ public class Mr_Mix_Move : MonoBehaviour
     public float attackRange = 2f;
 
     public float patrolSpeed = 2f;
-    public float chaseSpeed = 5f;
+    public float chaseSpeed = 4.5f;
 
     private NavMeshAgent AIAgent;
     private int currentPatrolIndex = 0;
+    private float stuckCheckTimer = 0f;
 
     private enum State { Patrol, Chase, Attack }
     private State currentState = State.Patrol;
 
     private bool hasSeenPlayer = false;
 
+    // 🔊 Audio support
+    public AudioSource chaseMusic;
+    public AudioSource themeMusicSource;
+    public AudioClip salman_level_chase;
+
     void Start()
     {
         AIAgent = GetComponent<NavMeshAgent>();
+
+        // NavMesh settings
         AIAgent.speed = patrolSpeed;
+        AIAgent.acceleration = 6f;
+        AIAgent.angularSpeed = 360f;
+        AIAgent.radius = 0.3f;
+        AIAgent.stoppingDistance = 0.5f;
+        AIAgent.autoBraking = false;
+        AIAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+        AIAgent.updateRotation = true;
+        AIAgent.updateUpAxis = true;
+
+        if (chaseMusic == null)
+            chaseMusic = GetComponent<AudioSource>();
 
         if (patrolPoints.Length > 0)
             AIAgent.SetDestination(patrolPoints[currentPatrolIndex].position);
@@ -38,7 +56,28 @@ public class Mr_Mix_Move : MonoBehaviour
 
         if (canSeePlayer)
         {
-            hasSeenPlayer = true;
+            if (!hasSeenPlayer)
+            {
+                Debug.Log("👁️ Mr. Mix spotted the player for the first time!");
+
+                hasSeenPlayer = true;
+                currentState = State.Chase;
+
+                // Stop theme music if playing
+                if (themeMusicSource != null && themeMusicSource.isPlaying)
+                {
+                    themeMusicSource.Stop();
+                }
+
+                // Play chase music forever
+                if (chaseMusic != null && salman_level_chase != null)
+                {
+                    chaseMusic.clip = salman_level_chase;
+                    chaseMusic.loop = true;
+                    chaseMusic.Play();
+                    Debug.Log("🎵 Chase music started forever!");
+                }
+            }
         }
 
         switch (currentState)
@@ -61,13 +100,6 @@ public class Mr_Mix_Move : MonoBehaviour
     {
         AIAgent.speed = patrolSpeed;
 
-        if (hasSeenPlayer)
-        {
-            Debug.Log("👁️ Mr. Mix has spotted the player! Begin eternal chase.");
-            currentState = State.Chase;
-            return;
-        }
-
         if (!AIAgent.pathPending && AIAgent.remainingDistance < 0.5f)
         {
             currentPatrolIndex = (currentPatrolIndex + 1) % patrolPoints.Length;
@@ -77,37 +109,43 @@ public class Mr_Mix_Move : MonoBehaviour
 
     void ChaseBehavior(float distance)
     {
-        AIAgent.isStopped = false;
         AIAgent.speed = chaseSpeed;
+        AIAgent.isStopped = false;
 
-        if (!AIAgent.isOnNavMesh)
+        if (!AIAgent.pathPending && Vector3.Distance(AIAgent.destination, player.position) > 1f)
         {
-            Debug.LogWarning("❌ Mr. Mix is NOT on the NavMesh!");
-            return;
+            AIAgent.SetDestination(player.position);
+        }
+
+        // Recalculate path if stuck
+        stuckCheckTimer += Time.deltaTime;
+        if (stuckCheckTimer >= 1.5f && AIAgent.velocity.sqrMagnitude < 0.1f)
+        {
+            Debug.Log("🔄 Recalculating path — Mr. Mix might be stuck.");
+            AIAgent.ResetPath();
+            AIAgent.SetDestination(player.position);
+            stuckCheckTimer = 0f;
         }
 
         if (distance < attackRange)
         {
             currentState = State.Attack;
-            return;
         }
-
-        AIAgent.SetDestination(player.position);
-        Debug.Log("🏃 Mr. Mix is chasing. Distance: " + distance);
     }
 
     void AttackBehavior(float distance)
     {
+        AIAgent.isStopped = true;
         AIAgent.ResetPath();
-        AIAgent.speed = 0f;
         transform.LookAt(player);
 
         Debug.Log("💥 Mr. Mix is attacking!");
+
         if (distance > attackRange)
         {
+            AIAgent.isStopped = false;
             currentState = State.Chase;
         }
-        
     }
 
     bool CanSeePlayer()
@@ -117,22 +155,13 @@ public class Mr_Mix_Move : MonoBehaviour
 
         Debug.DrawRay(rayOrigin, directionToPlayer * chaseRange, Color.red);
 
-        Ray ray = new Ray(rayOrigin, directionToPlayer);
-        RaycastHit hit;
-
-        if (Physics.Raycast(ray, out hit, chaseRange))
+        if (Physics.Raycast(rayOrigin, directionToPlayer, out RaycastHit hit, chaseRange))
         {
-            Debug.Log("🔎 Ray hit: " + hit.collider.name);
-
             if (hit.collider.CompareTag("Player"))
             {
                 Debug.Log("🎯 Player detected by ray!");
                 return true;
             }
-        }
-        else
-        {
-            Debug.Log("❌ Ray hit nothing.");
         }
 
         return false;

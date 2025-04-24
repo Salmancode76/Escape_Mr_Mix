@@ -3,36 +3,63 @@ using TMPro;
 
 public class Collect_Keys : MonoBehaviour
 {
-    [Header("Key Collection Settings")]
     public int totalKeys = 6;
     private int collectedKeys = 0;
 
-    [Header("UI")]
-    public TMP_Text keyScoreText; // Assign this in the Inspector
+    public TMP_Text keyScoreText;
+    public GameObject doorObject;  // Drag door GameObject here
 
+    public float openRotationY = 90f; // How much to rotate (door opening angle)
+    public float openSpeed = 2f;
+
+    private bool doorShouldOpen = false;
+    private Quaternion targetRotation;
+
+    void Update()
+    {
+        // Smoothly rotate door when triggered
+        if (doorShouldOpen && doorObject != null)
+        {
+            doorObject.transform.rotation = Quaternion.Lerp(
+                doorObject.transform.rotation,
+                targetRotation,
+                Time.deltaTime * openSpeed
+            );
+        }
+    }
 
     public void AddKey()
     {
         collectedKeys++;
-
         UpdateUI();
+
+        if (collectedKeys >= totalKeys)
+        {
+            OpenDoor();
+        }
     }
 
     void UpdateUI()
     {
-        if (keyScoreText == null)
+        if (keyScoreText != null)
         {
-            Debug.LogWarning("⚠️ keyScoreText is null! Can't update UI.");
-            return;
+            keyScoreText.text = collectedKeys >= totalKeys
+                ? "All Keys Collected!"
+                : $"Keys: {collectedKeys} / {totalKeys}";
         }
+    }
 
-        if (collectedKeys >= totalKeys)
+    void OpenDoor()
+    {
+        Debug.Log("✅ All keys collected — rotating the door open");
+        if (doorObject != null)
         {
-            keyScoreText.text = "All Keys Collected!";
+            targetRotation = Quaternion.Euler(0, openRotationY, 0);
+            doorShouldOpen = true;
         }
         else
         {
-            keyScoreText.text = $"Keys: {collectedKeys} / {totalKeys}";
+            Debug.LogWarning("🚪 Door GameObject not assigned!");
         }
     }
 }

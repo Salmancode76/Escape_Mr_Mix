@@ -13,8 +13,8 @@ public class trigger_music_game2 : MonoBehaviour
             temp++;
             if (musicSource != null && musicClip != null)
             {
-                musicSource.clip = musicClip;
-                musicSource.Play();
+               // musicSource.clip = musicClip;
+               // musicSource.Play();
             }
         }
     }

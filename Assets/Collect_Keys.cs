@@ -5,6 +5,7 @@ public class Collect_Keys : MonoBehaviour
 {
     public int totalKeys = 6;
     private int collectedKeys = 0;
+    public int CollectedKeys => collectedKeys;
 
     public TMP_Text keyScoreText;
     public GameObject doorObject;  // Drag door GameObject here
@@ -52,6 +53,7 @@ public class Collect_Keys : MonoBehaviour
     void OpenDoor()
     {
         Debug.Log("✅ All keys collected — rotating the door open");
+      /*
         if (doorObject != null)
         {
             targetRotation = Quaternion.Euler(0, openRotationY, 0);
@@ -61,5 +63,6 @@ public class Collect_Keys : MonoBehaviour
         {
             Debug.LogWarning("🚪 Door GameObject not assigned!");
         }
+        */
     }
 }

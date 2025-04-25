@@ -1,5 +1,17 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-Assets/Characters/Ghassan/Ghassan_Model.Fbx filter=lfs diff=lfs merge=lfs -text
-*.fbx filter=lfs diff=lfs merge=lfs -text
-*.tga filter=lfs diff=lfs merge=lfs -text
+
+# Track all Unity asset types under Assets/ with Git LFS
+Assets/**/*.fbx filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.tga filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.png filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.jpg filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.jpeg filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.wav filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.mp3 filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.psd filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.prefab filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.anim filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.controller filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.mat filter=lfs diff=lfs merge=lfs -text
+Assets/**/*.unity filter=lfs diff=lfs merge=lfs -text

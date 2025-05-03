@@ -3,7 +3,13 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - RootHinge
+  - CameraHinge
+  - WeaponHinge
+  - Terrain
+  - Fire
+  - Dirt
   layers:
   - Default
   - TransparentFX
@@ -12,21 +18,21 @@ TagManager:
   - Water
   - UI
   - Ground
-  - PP
+  - 
+  - First Person Weapon
+  - Physics Shell
+  - Enemy
+  - Obstacle
+  - Player
   - 
   - 
   - 
   - 
   - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - RemoteBody
+  - RemoteFPSBody
+  - PostProcessing
+  - ScopePostProcessing
   - 
   - 
   - 

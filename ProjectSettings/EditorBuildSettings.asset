@@ -23,4 +23,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/5- Ahmed.unity
     guid: b3879e84785181d43a4a48be45746b51
-  m_configObjects: {}
+  m_configObjects:
+    Global Input Config Asset Key: {fileID: 11400000, guid: dd3b0d883a9ee4388b0ec876b51e7bbd,
+      type: 2}
+    com.unity.input.settings: {fileID: 11400000, guid: f9e2eaf6d82eba24598ca7f674fccbc7,
+      type: 2}

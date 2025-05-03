@@ -106,8 +106,8 @@ MonoBehaviour:
     overrideState: 0
     value: {x: 1, y: 1, z: 1, w: 0}
   gamma:
-    overrideState: 1
-    value: {x: 0.9894531, y: 0.97022533, z: 1, w: 0}
+    overrideState: 0
+    value: {x: 0.95388126, y: 1, z: 0.9324967, w: 0}
   gain:
     overrideState: 0
     value: {x: 1, y: 1, z: 1, w: 0}

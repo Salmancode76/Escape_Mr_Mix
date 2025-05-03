@@ -336,7 +336,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303903197284336891}
-  m_LocalRotation: {x: -0.0000000046566124, y: 1.1641531e-10, z: 0.000000001355147, w: 1}
+  m_LocalRotation: {x: -0.0000000046566124, y: 1.1641531e-10, z: 0.000000001355147,
+    w: 1}
   m_LocalPosition: {x: 0.046, y: -0.239, z: 0.08}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -7582,7 +7583,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 90efd6e1b27708e49a5ef573b109675e, type: 3}
+  m_Actions: {fileID: -944628639613478452, guid: 90efd6e1b27708e49a5ef573b109675e,
+    type: 3}
   m_NotificationBehavior: 3
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
@@ -7626,11 +7628,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   walkClipsArray:
-  - {fileID: 8300000, guid: c73cacd36eb7882408ba844f9bcbaf0f, type: 3}
-  - {fileID: 8300000, guid: 8073350d5b236a9458ab75e61ea9e998, type: 3}
-  - {fileID: 8300000, guid: 8073bdce40e165a479908f65365c74f1, type: 3}
-  - {fileID: 8300000, guid: 161535f59c9aee54fba5c9448f888f17, type: 3}
-  - {fileID: 8300000, guid: 966a03375f5aece4d80f1c6ae01132c5, type: 3}
+  - {fileID: 8300000, guid: 2ca41b11ded2b6140bb05f5dac5dd4e1, type: 3}
+  - {fileID: 8300000, guid: ed4ea481742520b46ab738f34f319c6d, type: 3}
+  - {fileID: 8300000, guid: 0e8fd0760019cf941ad3da82eaac295e, type: 3}
+  - {fileID: 8300000, guid: ccdc0868487d1b94bb1f612e9b0e367e, type: 3}
+  - {fileID: 8300000, guid: 439db0aaedd4046489b25965f531b320, type: 3}
+  - {fileID: 8300000, guid: 764f89047ff28e74795ebd0e7679cccc, type: 3}
+  - {fileID: 8300000, guid: 1c440f2034bd1c146912aa6e645ca72c, type: 3}
+  - {fileID: 8300000, guid: 2f08dca4a29c5e74b88b139f4522ada8, type: 3}
+  - {fileID: 8300000, guid: 40a713dcc8fae214c8025ceb6305c1fb, type: 3}
+  - {fileID: 8300000, guid: 6293cdcc9be433a43842c40cbb5d4c93, type: 3}
   footstepInterval: 0.48
   AnimBlendSpeed: 8.9
   CameraRoot: {fileID: 303903197284336888}
@@ -7660,8 +7667,10 @@ MonoBehaviour:
   spawnOverDistance: 2
   spawnOverAngle: 45
   randomOffsetOnAngleSpawn: 0.05
-  leftFootDecalTemplate: {fileID: 1780737778782704713, guid: d16ccf965596c994fb4533048d116b03, type: 3}
-  rightFootDecalTemplate: {fileID: 599005922816807584, guid: 0c1c6b2ae11dafd4488a5c8a4ae2b7e4, type: 3}
+  leftFootDecalTemplate: {fileID: 1780737778782704713, guid: d16ccf965596c994fb4533048d116b03,
+    type: 3}
+  rightFootDecalTemplate: {fileID: 599005922816807584, guid: 0c1c6b2ae11dafd4488a5c8a4ae2b7e4,
+    type: 3}
   leftRaycastPoint: {fileID: 303903197568418556}
   rightRaycastPoint: {fileID: 303903198250521784}
   groundMask:

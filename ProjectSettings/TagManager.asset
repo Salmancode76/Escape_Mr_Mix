@@ -10,6 +10,32 @@ TagManager:
   - Terrain
   - Fire
   - Dirt
+  - PuzzleObject
+  - PuzzleIcon
+  - IgnoreDoubleTap
+  - inventoryEntry
+  - PlayerRayIsBlocked
+  - InteractObject
+  - PuzzleRefPosition
+  - Item
+  - spawnPosition
+  - charaVoiceOverAudioSource
+  - a_Listener
+  - TextInGame
+  - OnlyFocusIcon
+  - Head
+  - mobileCanvas
+  - Action
+  - ViewerTurntable
+  - Wood
+  - DoNotClimb
+  - Info
+  - CamFocusPos
+  - Focus
+  - chara Trigger
+  - SpownPosition
+  - Tree
+  - Door4
   layers:
   - Default
   - TransparentFX

@@ -22,6 +22,7 @@ public class MixAIController : MonoBehaviour
     public BehaviorMode behaviorMode = BehaviorMode.OnDetect;
     [SerializeField] private AIState currentState = AIState.Patrolling;
     [SerializeField] private float stateChangeDelay = 0.5f;
+    [SerializeField] public bool switchToFollowMode = false;
     private float lastStateChangeTime;
 
     [Header("Patrol Settings")]
@@ -87,6 +88,8 @@ public class MixAIController : MonoBehaviour
     [Header("Death Handling")]
     public GameObject DeathUICanvas;
     public AudioClip DeadPlayerSFX, DeathUIMusicSFX;
+
+
 
     private void Awake()
     {
@@ -171,6 +174,7 @@ public class MixAIController : MonoBehaviour
         TransitionToState(AIState.Patrolling);
     }
 
+
     private void FindPlayer()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -188,6 +192,17 @@ public class MixAIController : MonoBehaviour
 
     private void Update()
     {
+
+        if (behaviorMode == BehaviorMode.OnDetect && switchToFollowMode)
+        {
+            behaviorMode = BehaviorMode.OnFollow;
+            if (playerTransform != null)
+            {
+                lastKnownPlayerPosition = playerTransform.position;
+                TransitionToState(AIState.Chasing);
+            }
+        }
+
         if (behaviorMode == BehaviorMode.OnFollow && playerTransform != null)
         {
             lastKnownPlayerPosition = playerTransform.position;

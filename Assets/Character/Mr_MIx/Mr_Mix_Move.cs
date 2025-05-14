@@ -23,8 +23,9 @@ public class Mr_Mix_Move : MonoBehaviour
     private bool hasSeenPlayer = false;
 
     // 🔊 Audio support
-    public AudioSource chaseMusic;
     public AudioSource themeMusicSource;
+    public AudioSource chaseMusic;
+
     public AudioClip salman_level_chase;
 
     void Start()

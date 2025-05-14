@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class CloseDoorTrigger : MonoBehaviour
 {
@@ -9,9 +10,10 @@ public class CloseDoorTrigger : MonoBehaviour
     public AudioClip bomb_beeb;
     public AudioClip evilLaugh;
     public AudioClip newThemeMusic;
-        public Collider doorCollider;
-
-
+    public Collider doorCollider; // This should be the collider on doorObject2
+    public TextMeshProUGUI trapMessageText;
+    public GameObject objectToDestroy;
+    
     private bool hasClosed = false;
 
     void OnTriggerEnter(Collider other)
@@ -20,11 +22,12 @@ public class CloseDoorTrigger : MonoBehaviour
 
         if (other.CompareTag("Player"))
         {
+            Destroy(objectToDestroy);
             Animation anim = doorObject2.GetComponent<Animation>();
 
             if (anim != null && anim.GetClip("Close") != null)
             {
-                // 🔇 Stop all current music/audio
+                // Stop all current music/audio
                 foreach (AudioSource audio in FindObjectsOfType<AudioSource>())
                 {
                     if (audio.isPlaying)
@@ -33,11 +36,11 @@ public class CloseDoorTrigger : MonoBehaviour
 
                 Debug.Log("🔇 All music stopped.");
 
-                // 🔊 Immediately play evil laugh one-shot
+                // Play evil laugh
                 if (evilLaugh != null)
                     AudioSource.PlayClipAtPoint(evilLaugh, Camera.main.transform.position);
 
-                // 💣 Loop bomb_beeb (from BombAudio)
+                // Loop bomb_beeb from BombAudio object
                 if (bomb_beeb != null)
                 {
                     GameObject bombAudioObj = GameObject.Find("BombAudio");
@@ -51,7 +54,7 @@ public class CloseDoorTrigger : MonoBehaviour
                     }
                 }
 
-                // 🎵 Loop newThemeMusic (from GlobalAudio)
+                // Loop new theme music from GlobalAudio object
                 if (newThemeMusic != null)
                 {
                     GameObject globalAudioObj = GameObject.Find("GlobalAudio");
@@ -65,7 +68,7 @@ public class CloseDoorTrigger : MonoBehaviour
                     }
                 }
 
-                // 🚪 Door closing animation & sound
+                // Close door animation & sound
                 if (closeDoorSound != null)
                     AudioSource.PlayClipAtPoint(closeDoorSound, transform.position);
 
@@ -74,10 +77,28 @@ public class CloseDoorTrigger : MonoBehaviour
 
                 Debug.Log("🚪 First door closed!");
 
-                // Start coroutine to open second door after 3 seconds
+                // Enable the collider on the first door when it closes
+                // This ensures player can't walk through the closed door
+                if (doorCollider != null)
+                {
+                    doorCollider.enabled = true;
+                    Debug.Log("✅ First door collider enabled - blocking passage!");
+                }
+
+                // Start coroutine to open second door after delay
                 StartCoroutine(OpenNextDoorAfterDelay());
 
                 hasClosed = true;
+
+                // Show trap message
+                if (trapMessageText != null)
+                {
+                    trapMessageText.text = "Explosives surround you. One way out. One chance. Win my game… or paint the room red.";
+                    trapMessageText.enabled = true;
+                    Debug.Log("💀 Trap message shown.");
+
+                    StartCoroutine(HideTrapMessageAfterDelay());
+                }
             }
             else
             {
@@ -96,13 +117,30 @@ public class CloseDoorTrigger : MonoBehaviour
             if (secondAnim != null && secondAnim.GetClip("Open") != null)
             {
                 secondAnim.Play("Open");
-                  doorCollider.enabled = false;
-                Debug.Log("🚪 Second door opened after delay!");
+                
+                // Disable the collider on the second door when it opens
+                // so player can walk through
+                Collider secondDoorCollider = doorToOpen.GetComponent<Collider>();
+                if (secondDoorCollider != null)
+                {
+                    secondDoorCollider.enabled = false;
+                    Debug.Log("🚪 Second door opened - collider disabled!");
+                }
             }
             else
             {
                 Debug.LogWarning("❌ Second door animation missing or no 'Open' clip.");
             }
+        }
+    }
+
+    IEnumerator HideTrapMessageAfterDelay()
+    {
+        yield return new WaitForSeconds(5f);
+        if (trapMessageText != null)
+        {
+            trapMessageText.text = "";
+            Debug.Log("🧹 Trap message cleared.");
         }
     }
 }

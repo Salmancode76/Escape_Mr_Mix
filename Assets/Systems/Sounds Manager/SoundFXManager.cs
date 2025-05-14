@@ -14,6 +14,24 @@ public class SoundFXManager : MonoBehaviour
         }
 
     }
+public void PlayFootstepsBasedOnDistance(AudioClip clip, Transform target, float volume)
+{
+    float distance = Vector3.Distance(transform.position, target.position);
+
+    if (distance < 10f)
+    {
+        Debug.Log("👣 Playing close footstep sound");
+        playSoundFXClip(clip, target, volume);
+    }
+    else
+    {
+        Debug.Log("👣 Playing distant footstep sound (quieter)");
+        playSoundFXClip(clip, target, volume * 0.5f);
+    }
+}
+
+
+
 
     public void playSoundFXClip(AudioClip audioClip, Transform spawnTransform, float volume){
             // spawn the gameObject

@@ -11,6 +11,7 @@ public class trigger_music_game2 : MonoBehaviour
         if (other.CompareTag("Player") && temp ==0)
         {
             temp++;
+            
             if (musicSource != null && musicClip != null)
             {
                // musicSource.clip = musicClip;

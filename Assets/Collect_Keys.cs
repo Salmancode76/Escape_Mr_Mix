@@ -45,7 +45,7 @@ public class Collect_Keys : MonoBehaviour
         if (keyScoreText != null)
         {
             keyScoreText.text = collectedKeys >= totalKeys
-                ? "All Keys Collected!"
+                ? "All Keys Collected!, open the hallway door!"
                 : $"Keys: {collectedKeys} / {totalKeys}";
         }
     }

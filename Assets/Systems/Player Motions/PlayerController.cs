@@ -45,6 +45,9 @@ namespace UnityTutorial.PlayerControl
         private const float _runSpeed = 6f;
         private Vector2 _currentVelocity;
 
+        // Jumping disabled flag
+        private bool _jumpingDisabled = true; // Set to true to disable jumping
+
         // Footstep Audio
         private AudioClip[] footstepClips;
         private int currentStepIndex = 0;
@@ -74,7 +77,13 @@ namespace UnityTutorial.PlayerControl
         {
             SampleGround();
             Move();
-            HandleJump();
+            
+            // Only call HandleJump if jumping is not disabled
+            if (!_jumpingDisabled)
+            {
+                HandleJump();
+            }
+            
             HandleCrouch();
             HandleSlid();
         }
@@ -219,7 +228,9 @@ namespace UnityTutorial.PlayerControl
         private void HandleSlid()
         {
             if (!_grounded) return;
-            _animator.SetBool(_Slid, _inputManager.Slid);
+            //I DON'T LIKE SLIDE
+            //_animator.SetBool(_Slid, _inputManager.Slid);
+            _animator.SetBool(_Slid, false);
         }
 
         private void HandleJump()
@@ -228,11 +239,15 @@ namespace UnityTutorial.PlayerControl
             if (!_inputManager.Jump) return;
             if (!_grounded) return;
 
+            // This won't be called if jumping is disabled
             _animator.SetTrigger(_jumpHash);
         }
 
         public void JumpAddForce()
         {
+            // Early return if jumping is disabled
+            if (_jumpingDisabled) return;
+            
             _playerRigidbody.AddForce(-_playerRigidbody.velocity.y * Vector3.up, ForceMode.VelocityChange);
             _playerRigidbody.AddForce(Vector3.up * JumpFactor, ForceMode.Impulse);
             _animator.ResetTrigger(_jumpHash);
@@ -262,4 +277,3 @@ namespace UnityTutorial.PlayerControl
         }
     }
 }
-

@@ -32,6 +32,12 @@ TagManager:
   - inventoryEntry
   - Head
   - DoNotClimb
+  - Text
+  - Dirt
+  - CameraHinge
+  - RootHinge
+  - Terrain
+  - Stone
   layers:
   - Default
   - TransparentFX

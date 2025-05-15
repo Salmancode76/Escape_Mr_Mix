@@ -4,67 +4,63 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - RootHinge
-  - CameraHinge
-  - WeaponHinge
-  - Terrain
-  - Fire
-  - Dirt
-  - PuzzleObject
-  - PuzzleIcon
-  - IgnoreDoubleTap
-  - inventoryEntry
-  - PlayerRayIsBlocked
-  - InteractObject
-  - PuzzleRefPosition
-  - Item
-  - spawnPosition
-  - charaVoiceOverAudioSource
-  - a_Listener
-  - TextInGame
-  - OnlyFocusIcon
-  - Head
-  - mobileCanvas
   - Action
-  - ViewerTurntable
-  - Wood
-  - DoNotClimb
   - Info
   - CamFocusPos
   - Focus
-  - chara Trigger
-  - SpownPosition
-  - Tree
-  - Door4
+  - ViewerTurntable
+  - btnNavigationInputMenu
+  - btnRemapInput
+  - charaTrigger
+  - Wood
+  - Item
+  - InteractObject
+  - mobileCanvas
+  - spawnPosition
+  - IgnoreDoubleTap
+  - charaVoiceOverAudioSource
+  - PlayerRayIsBlocked
+  - PuzzleObject
+  - PuzzleRefPosition
+  - PuzzleIcon
+  - Drawer
+  - CharaSlidingCol
+  - TextInGame
+  - OnlyFocusIcon
+  - GearFixed
+  - a_Listener
+  - inventoryEntry
+  - Head
+  - DoNotClimb
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - Ground
-  - 
   - First Person Weapon
+  - 
+  - ObjectViewerCam
+  - detector
+  - layerTrigger
+  - layerPlayer
+  - layerDoor
+  - CollisionOnlyWithPlayer
+  - Text3D
+  - Puzzle
+  - PuzzleFeedBackCam
+  - ColDrawerOnlyWithPlayer
+  - objsFloor
+  - 
+  - Player
   - Physics Shell
   - Enemy
   - Obstacle
-  - Player
-  - 
-  - 
-  - 
-  - 
-  - 
   - RemoteBody
   - RemoteFPSBody
   - PostProcessing
   - ScopePostProcessing
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
   - 
   - 
   - 
